@@ -6,4 +6,4 @@ An **I2C interface** was implemented in hardware to properly control and program
 
 It was used a **framebuffer** to manage the difference between raw data timing from camera and HDMI timing.
 
-For final transmission of HDMI data to monitor, a **reference design** from Terasic was used as a top module, in which the custom logic was collocated.
+For final transmission of HDMI data to monitor, a **reference design** from Terasic was used as a top module, in which the custom logic was collocated. You will need all the files inclued in the reference project in order to make it work.
