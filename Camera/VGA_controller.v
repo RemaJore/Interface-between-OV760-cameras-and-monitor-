@@ -7,10 +7,7 @@ module VGA_controller(clr,
 					href,
 					vga_hsync,
 					vga_vsync,
-					/*vga_red,vga_green,
-					vga_blue*/
 					data_enable,
-					/*frame_address*/
 					data_out);
 
 input wire clr;
@@ -42,15 +39,15 @@ OV7670_capture cap(.pclk(pclk),
 				   .we(write_enable)
 				   );
 				   
-//framebuffer frb(.pclk(pclk),.clk50(clk50),.din(dout_capture),.wr_address(wr_address),.rd_address(rd_address),.write_enable(write_enable),.dout(dout_framebuffer));
+
 gen_VGA_480p gen_VGA_480p_inst(.reset(clr),
-							   .clk27(clk27),
-							   .data(data_out),
-							   .frame_pixel(dout_framebuffer),
-							   .frame_addr(rd_address),
-							   .vsync(vga_vsync),
-							   .hsync(vga_hsync),
-							   .href(data_enable)
+			           .clk27(clk27),
+				   .data(data_out),
+				   .frame_pixel(dout_framebuffer),
+				   .frame_addr(rd_address),
+				   .vsync(vga_vsync),
+				   .hsync(vga_hsync),
+			           .href(data_enable)
 							   );
 							   
 							   
