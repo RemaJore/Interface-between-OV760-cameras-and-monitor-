@@ -1,12 +1,12 @@
 
 module OV7670_capture(pclk,
-					  vsync,
-					  href,
-					  d,
-					  addr,
-					  dout,
-					  we
-					  );
+			vsync,
+			href,
+			d,
+			addr,
+			dout,
+			we
+			);
 
 input wire pclk;   // 25MHz clock
 input wire vsync;
@@ -29,35 +29,35 @@ assign dout = dout_temp;
 assign we = we_temp;
 
 
-always @(posedge pclk)                //registro per address
+	always @(posedge pclk)                //address register
 begin
 	address <= (vsync==1'b1)? 19'd0 : address_next;
 end
 
 
-always @(posedge pclk)               //registro per address_next
+	always @(posedge pclk)               //er address_next register
 begin
 	if (vsync==1'b1) address_next <= 19'd0;
 	else if (wr_hold[1]==1'b1) address_next <= address_next + 1'b1;
 end
 
 
-always @(posedge pclk)               //registro per wr_hold
+	always @(posedge pclk)               //wr_hold register
 begin
 	wr_hold <= (vsync==1'b1)? 2'b00 : {wr_hold[0], (href && !wr_hold[0])};
 end
 
-always @(posedge pclk)               //registro per we_temp
+	always @(posedge pclk)               //we_temp register
 begin
 	if (vsync==1'b0) we_temp <= wr_hold[1];
 end
 
-always @(posedge pclk)               //registro per dout_temp
+	always @(posedge pclk)               //dout_temp register
 begin
-	if (vsync==1'b0)	dout_temp <= {d_latch[15:13],d_latch[10:8],d_latch[4:2]}; /*{d_latch[7:4],d_latch[11:8],d_latch[3:0]};*/
+	if (vsync==1'b0)	dout_temp <= {d_latch[15:13],d_latch[10:8],d_latch[4:2]};
 end
 
-always @(posedge pclk)               //registro per d_latch
+	always @(posedge pclk)               //d_latch register
 begin
 	if (vsync==1'b0) d_latch <= {d_latch [7:0], d};
 end
