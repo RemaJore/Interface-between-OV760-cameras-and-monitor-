@@ -1,5 +1,12 @@
 
-module OV7670_registers(clk, resend, advance, command, finished);
+module OV7670_registers(clk, 
+			resend, 
+			advance, 
+			command, 
+			finished
+		       );
+	
+	
 	 output wire finished;
 	 output wire [15:0] command;
 	 input wire advance;
@@ -67,7 +74,7 @@ module OV7670_registers(clk, resend, advance, command, finished);
     31: dout <= 16'hB1_0c; //ABLC1
     32: dout <= 16'hB2_0e; //RSVD       more magic internet values
     33: dout <= 16'hB3_80; //THL_ST
-    //begin mystery scaling numbers
+    //scaling numbers
     34: dout <= 16'h70_3a;
     35: dout <= 16'h71_35;
     36: dout <= 16'h72_11;
