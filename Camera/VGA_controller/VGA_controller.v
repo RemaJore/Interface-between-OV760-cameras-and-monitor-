@@ -1,17 +1,14 @@
 
 module VGA_controller(clr,
-					clk27,
-					pclk,
-					vsync,
-					data,
-					href,
-					vga_hsync,
-					vga_vsync,
-					/*vga_red,vga_green,
-					vga_blue*/
-					data_enable,
-					/*frame_address*/
-					data_out);
+			clk27,
+			pclk,
+			vsync,
+			data,
+			href,
+			vga_hsync,
+			vga_vsync,
+			data_enable,
+			data_out);
 
 input wire clr;
 input wire clk27;
@@ -34,34 +31,34 @@ wire [8:0] dout_framebuffer;
 
 
 OV7670_capture cap(.pclk(pclk),
-				   .vsync(vsync),
-				   .href(href),
-				   .d(data),
-				   .addr(wr_address),
-				   .dout(dout_capture),
-				   .we(write_enable)
-				   );
+		   .vsync(vsync),
+		   .href(href),
+		   .d(data),
+		   .addr(wr_address),
+		   .dout(dout_capture),
+		   .we(write_enable)
+		   );
 				   
-//framebuffer frb(.pclk(pclk),.clk50(clk50),.din(dout_capture),.wr_address(wr_address),.rd_address(rd_address),.write_enable(write_enable),.dout(dout_framebuffer));
+
 gen_VGA_480p gen_VGA_480p_inst(.reset(clr),
-							   .clk27(clk27),
-							   .data(data_out),
-							   .frame_pixel(dout_framebuffer),
-							   .frame_addr(rd_address),
-							   .vsync(vga_vsync),
-							   .hsync(vga_hsync),
-							   .href(data_enable)
-							   );
+			       .clk27(clk27),
+				.data(data_out),
+				.frame_pixel(dout_framebuffer),
+				.frame_addr(rd_address),
+				.vsync(vga_vsync),
+				.hsync(vga_hsync),
+				.href(data_enable)
+				);
 							   
 							   
 framebuffer2port frb2p(.data(dout_capture),
-					   .rdaddress(rd_address),
-					   .rdclock(clk27),
-					   .wraddress(wr_address),
-					   .wrclock(pclk),
-					   .wren(write_enable),
-					   .q(dout_framebuffer)
-					   );
+			.rdaddress(rd_address),
+			.rdclock(clk27),
+			.wraddress(wr_address),
+			.wrclock(pclk),
+			.wren(write_enable),
+			.q(dout_framebuffer)
+			);
 					   
 					   
 endmodule 
