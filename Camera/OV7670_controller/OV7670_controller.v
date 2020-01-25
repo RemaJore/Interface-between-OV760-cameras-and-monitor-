@@ -1,7 +1,17 @@
-
-module OV7670_controller(clk, resend, config_finished, sioc, siod, reset, pwdn, xclk, clr);
-//il controller gestisce tutti i pin di controllo della camera OV7670
-    
+//----------------------------------------------------------------------------------------
+//                controller handles OV7670 control input/output pins
+//----------------------------------------------------------------------------------------
+module OV7670_controller(clk, 
+			 resend, 
+			 config_finished, 
+			 sioc, 
+			 siod, 
+			 reset, 
+			 pwdn, 
+			 xclk, 
+			 clr
+			);
+	   
     output wire config_finished;
 	 output wire sioc;
 	 wire [15:0] command;
