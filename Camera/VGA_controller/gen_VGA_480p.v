@@ -1,4 +1,12 @@
-module gen_VGA_480p(reset,clk27, hsync, vsync, href, data, frame_addr, frame_pixel);
+module gen_VGA_480p(reset,
+		    clk27, 
+		    hsync, 
+		    vsync, 
+		    href, 
+		    data, 
+		    frame_addr, 
+		    frame_pixel
+		   );
 
 input wire reset;
 input wire clk27;
