@@ -1,7 +1,17 @@
 
-module i2c_sender(clk, siod, sioc, taken, send, id, rega, value, clr);
+module i2c_sender(clk, 
+		  siod, 
+		  sioc, 
+		  taken, 
+		  send, 
+		  id, 
+		  rega, 
+		  value, 
+		  clr
+		  );
+	
 	 input wire clr;
-    input wire clk;
+         input wire clk;
 	 inout wire siod;
 	 output wire sioc;
 	 output wire taken;
@@ -19,13 +29,13 @@ module i2c_sender(clk, siod, sioc, taken, send, id, rega, value, clr);
     assign taken = taken_temp;
 	 
 	 
-	 always@(busy_sr, data_sr[31])   //registro per siod I2C
+	always@(busy_sr, data_sr[31])   //siod I2C register
 	 begin
 		siod_temp<=(busy_sr[11:10] == 2'b10 || busy_sr[20:19] == 2'b10 || busy_sr[29:28] == 2'b10)?1'bz : data_sr[31];
 	  end
 	 
 	 
-	 always@(posedge clk)    //registro per il taken(advance)
+	always@(posedge clk)            //taken(advance) register
 	 begin
 		if(clr==1'b1)
 			taken_temp<=1'b0;
@@ -33,7 +43,7 @@ module i2c_sender(clk, siod, sioc, taken, send, id, rega, value, clr);
 	  end
 		
 		
-	 always@(posedge clk)   //registro per il sioc I2C
+	always@(posedge clk)            //sioc I2C register
 	 begin
 		if(clr==1'b1)
 			sioc_temp <= 1'b0;
@@ -51,7 +61,7 @@ module i2c_sender(clk, siod, sioc, taken, send, id, rega, value, clr);
 	 end
 	 
 	 
-	 always@(posedge clk)   //registro per il segnale dati
+	always@(posedge clk)            //data signal register
 	 begin
 	 if(clr==1'b1)
 		data_sr<=32'hFFFFFFFF;
@@ -59,13 +69,13 @@ module i2c_sender(clk, siod, sioc, taken, send, id, rega, value, clr);
 		begin
 			case (busy_sr[31])
 			1'b0 : if(send==1'b1) data_sr <= {3'b100,id,1'b0,rega,1'b0,value,1'b0,2'b01};
-			1'b1 : data_sr <= {data_sr[30:0],1'b1};            //ogni ciclo di divider shifta   
+				1'b1 : data_sr <= {data_sr[30:0],1'b1};            //one shift every divider cycle   
 			endcase
 		end
 	 end
 		
 		
-	 always@(posedge clk)   //registro per il busy_sr
+	always@(posedge clk)   		//busy_sr register
 	 begin
 	 if(clr==1'b1)
 		busy_sr<=32'd0;
@@ -73,7 +83,7 @@ module i2c_sender(clk, siod, sioc, taken, send, id, rega, value, clr);
 		begin
 			case(busy_sr[31])
 			1'b0 : if (send==1'b1) busy_sr <= {3'b111,9'b111111111,9'b111111111,9'b111111111,2'b11};
-			1'b1 : busy_sr <= {busy_sr[30:0],1'b0};           //ogni ciclo di divider shifta
+			1'b1 : busy_sr <= {busy_sr[30:0],1'b0};           //one shift every divider cycle 
 			endcase
 		end
 	 end
@@ -83,9 +93,9 @@ module i2c_sender(clk, siod, sioc, taken, send, id, rega, value, clr);
 	 begin
 		if(clr==1'b1)
 			divider<=8'b0000_0001;
-		else divider <= (busy_sr[31]==1'b0 && divider==8'h00 && send==1'b0)? divider : divider + 1'b1; //divisore del clock, ogni 256 fronti di clk
-		end																														  //busy_sr e data_sr variano, e di conseguenza
-																																	  //sioc
+		 //clock divider, changes every 256 clock positive edges
+		else divider <= (busy_sr[31]==1'b0 && divider==8'h00 && send==1'b0)? divider : divider + 1'b1;
+		end																														  /
 	 
 	
 		
